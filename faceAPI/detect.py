@@ -66,10 +66,13 @@ for i in faceId:
     }
     params_1 = urllib.parse.urlencode({
     })
-    body_1 = {'personGroupId' : 'innovlabv1',
+    body_1 = {
+    		'personGroupId' : 'innovlabv1',
             'faceIds':[
                 '%s'%i
-            ]
+            ],
+            'maxNumOfCandidatesReturned' : 10,
+            'confidenceThreshold' : 0.2
     }
     try:
         conn = http.client.HTTPSConnection('westcentralus.api.cognitive.microsoft.com')
