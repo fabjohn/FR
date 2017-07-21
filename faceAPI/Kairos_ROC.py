@@ -193,7 +193,7 @@ def recognize(image, gallery_name, headers):
 	values = {
 		'image': image,
 		'gallery_name': '%s'%gallery_name,
-		'threshold': '0.70',
+		'threshold': '0.00',
 		'max_num_results':'1000'
 	}
 
