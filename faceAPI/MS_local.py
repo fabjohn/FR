@@ -6,6 +6,7 @@ from sklearn.datasets import fetch_lfw_people
 import os
 import sys
 import pickle
+from sklearn.metrics import confusion_matrix
 
 
 
@@ -75,19 +76,22 @@ with open('accuracy_file2', 'rb') as fp:
 	del_list = pickle.load(fp)
 for index in sorted(del_list, reverse=True):
 	del test_x[index]
-print(len(nameId))
-print(len(predictList))
-print(len(test_x))
+confidenceLists.sort()
+print(confidenceLists)
 # if len(predictList) != len(test_x):
 # 	print('this is not right. fuck')
 
 cnt = 0
+temp = []
 for i in range(len(predictList)):
 	if predictList[i] == nameId[test_x[i]]:
  		cnt +=1
+	temp.append(nameId[test_x[i]])
 accuracy = cnt/len(predictList)
 print(accuracy)
-
+plt.imshow(confusion_matrix(temp, predictList))
+plt.title('Confusion Matrix for Microsoft Face API at LFW dataset')
+plt.show()
 #0.9003667481662592 for 1636 people 
 
 

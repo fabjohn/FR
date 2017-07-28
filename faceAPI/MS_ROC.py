@@ -27,19 +27,7 @@ def main():
 	##lfw_people = fetch_lfw_people(min_faces_per_person = 10, resize = None)
 
 	#file IO
-	target_names = []
-	binary_data = []
-
-	for item in os.listdir(path):
-		curr_file = os.path.join(path, item)
-		if len(os.listdir(curr_file)) > 1:
-			target_names.append(item)
-			binary_temp = []
-			for face in os.listdir(curr_file):
-				face_file = os.path.join(curr_file, face)
-				temp = open(face_file, 'rb').read()
-				binary_temp.append(temp)
-			binary_data.append(binary_temp)
+	target_names, binary_data = pullLFW(path)
 
 
 	# print(len(lfw_people.images))
@@ -200,6 +188,23 @@ def main():
 
 ##def faceCrop()
 
+def pullLFW(path):
+
+	target_names = []
+	binary_data = []
+
+	for item in os.listdir(path):
+		curr_file = os.path.join(path, item)
+		if len(os.listdir(curr_file)) > 1:
+			target_names.append(item)
+			binary_temp = []
+			for face in os.listdir(curr_file):
+				face_file = os.path.join(curr_file, face)
+				temp = open(face_file, 'rb').read()
+				binary_temp.append(temp)
+			binary_data.append(binary_temp)
+
+	return target_names, binary_data
 
 def generateRoc(predictList,test_data, confidenceLists, nameId):
 	fprs = []
@@ -330,7 +335,7 @@ def addPersonFace(groupId, key, personId, binary_data):
 		conn.request("POST", "/face/v1.0/persongroups/%s/persons/%s/persistedFaces?%s" %(groupId, personId ,params) , binary_data, headers)
 		response = conn.getresponse()
 		data = response.read()
-		#print(data)
+		print(data)
 		conn.close()
 	except Exception as e:
 		print("[Errno {0}] {1}".format(e.errno, e.strerror))
@@ -438,8 +443,8 @@ def identifyFace(faceId, key, groupId):
             'faceIds':[
                 '%s'%faceId
             ],
-            'maxNumOfCandidatesReturned': 1,
-            #'confidenceThreshold' : 0.7
+            'maxNumOfCandidatesReturned': 5,
+            'confidenceThreshold' : 0.0
     }
     confList = []
     n=0
